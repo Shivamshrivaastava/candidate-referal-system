@@ -53,7 +53,9 @@ export default function Auth({ setIsAuthenticated }) {
 
         <Card className="auth-card" data-testid="auth-card">
           <CardHeader>
-            <CardTitle data-testid="card-title">{isLogin ? "Welcome Back" : "Create Account"}</CardTitle>
+            <CardTitle data-testid="card-title">
+              {isLogin ? "Welcome Back" : "Create Account"}
+            </CardTitle>
             <CardDescription data-testid="card-description">
               {isLogin ? "Sign in to manage referrals" : "Sign up to start referring candidates"}
             </CardDescription>
@@ -153,6 +155,7 @@ export default function Auth({ setIsAuthenticated }) {
         .auth-content {
           width: 100%;
           max-width: 450px;
+          padding: 1rem;
         }
 
         .auth-header {
@@ -166,7 +169,6 @@ export default function Auth({ setIsAuthenticated }) {
           background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          background-clip: text;
           margin-bottom: 0.5rem;
         }
 
@@ -185,7 +187,7 @@ export default function Auth({ setIsAuthenticated }) {
         .auth-form {
           display: flex;
           flex-direction: column;
-          gap: 1.5rem;
+          gap: 1.25rem;
         }
 
         .form-group {
@@ -234,6 +236,53 @@ export default function Auth({ setIsAuthenticated }) {
         .toggle-button:hover {
           color: #0369a1;
           text-decoration: underline;
+        }
+
+        /* ✅ Responsive styles */
+        @media (max-width: 768px) {
+          .auth-container {
+            padding: 1rem;
+          }
+
+          .auth-title {
+            font-size: 2.2rem;
+          }
+
+          .auth-subtitle {
+            font-size: 0.9rem;
+          }
+
+          .auth-card {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+          }
+
+          .submit-button {
+            font-size: 0.95rem;
+            height: 42px;
+          }
+
+          .form-group label {
+            font-size: 0.9rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .auth-title {
+            font-size: 1.8rem;
+          }
+
+          .auth-subtitle {
+            font-size: 0.85rem;
+          }
+
+          .auth-form {
+            gap: 1rem;
+          }
+
+          .submit-button {
+            font-size: 0.9rem;
+            height: 40px;
+          }
         }
       `}</style>
     </div>
