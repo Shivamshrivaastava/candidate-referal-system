@@ -1,9 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { UserPlus, LogIn } from "lucide-react";
 
@@ -15,7 +11,7 @@ export default function Auth({ setIsAuthenticated }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    full_name: ""
+    full_name: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -30,11 +26,13 @@ export default function Auth({ setIsAuthenticated }) {
         : formData;
 
       const response = await axios.post(endpoint, payload);
-      
+
       localStorage.setItem("token", response.data.access_token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      
-      toast.success(isLogin ? "Login successful!" : "Account created successfully!");
+
+      toast.success(
+        isLogin ? "Login successful!" : "Account created successfully!"
+      );
       setIsAuthenticated(true);
     } catch (error) {
       toast.error(error.response?.data?.detail || "Authentication failed");
@@ -47,99 +45,110 @@ export default function Auth({ setIsAuthenticated }) {
     <div className="auth-container" data-testid="auth-page">
       <div className="auth-content">
         <div className="auth-header">
-          <h1 className="auth-title" data-testid="auth-title">ReferHub</h1>
-          <p className="auth-subtitle">Candidate Referral Management System</p>
+          <h1 className="auth-title" data-testid="auth-title">
+            ReferHub
+          </h1>
+          <p className="auth-subtitle">
+            Candidate Referral Management System
+          </p>
         </div>
 
-        <Card className="auth-card" data-testid="auth-card">
-          <CardHeader>
-            <CardTitle data-testid="card-title">
+        <div className="auth-card" data-testid="auth-card">
+          <div className="auth-card-header">
+            <h2 data-testid="card-title">
               {isLogin ? "Welcome Back" : "Create Account"}
-            </CardTitle>
-            <CardDescription data-testid="card-description">
-              {isLogin ? "Sign in to manage referrals" : "Sign up to start referring candidates"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="auth-form">
-              {!isLogin && (
-                <div className="form-group">
-                  <Label htmlFor="full_name">Full Name</Label>
-                  <Input
-                    id="full_name"
-                    data-testid="full-name-input"
-                    type="text"
-                    placeholder="John Doe"
-                    value={formData.full_name}
-                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    required={!isLogin}
-                  />
-                </div>
-              )}
+            </h2>
+            <p data-testid="card-description">
+              {isLogin
+                ? "Sign in to manage referrals"
+                : "Sign up to start referring candidates"}
+            </p>
+          </div>
 
+          <form onSubmit={handleSubmit} className="auth-form">
+            {!isLogin && (
               <div className="form-group">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  data-testid="email-input"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
+                <label htmlFor="full_name">Full Name</label>
+                <input
+                  id="full_name"
+                  data-testid="full-name-input"
+                  type="text"
+                  placeholder="John Doe"
+                  value={formData.full_name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, full_name: e.target.value })
+                  }
+                  required={!isLogin}
                 />
               </div>
+            )}
 
-              <div className="form-group">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  data-testid="password-input"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  required
-                />
-              </div>
-
-              <Button
-                type="submit"
-                data-testid="auth-submit-button"
-                className="submit-button"
-                disabled={loading}
-              >
-                {loading ? (
-                  "Processing..."
-                ) : isLogin ? (
-                  <>
-                    <LogIn className="button-icon" />
-                    Sign In
-                  </>
-                ) : (
-                  <>
-                    <UserPlus className="button-icon" />
-                    Sign Up
-                  </>
-                )}
-              </Button>
-            </form>
-
-            <div className="toggle-auth">
-              <p>
-                {isLogin ? "Don't have an account?" : "Already have an account?"}
-                <button
-                  type="button"
-                  data-testid="toggle-auth-button"
-                  onClick={() => setIsLogin(!isLogin)}
-                  className="toggle-button"
-                >
-                  {isLogin ? "Sign Up" : "Sign In"}
-                </button>
-              </p>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                data-testid="email-input"
+                type="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                required
+              />
             </div>
-          </CardContent>
-        </Card>
+
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                data-testid="password-input"
+                type="password"
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              data-testid="auth-submit-button"
+              className="submit-button"
+              disabled={loading}
+            >
+              {loading ? (
+                "Processing..."
+              ) : isLogin ? (
+                <>
+                  <LogIn className="button-icon" /> Sign In
+                </>
+              ) : (
+                <>
+                  <UserPlus className="button-icon" /> Sign Up
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="toggle-auth">
+            <p>
+              {isLogin
+                ? "Don't have an account?"
+                : "Already have an account?"}
+              <button
+                type="button"
+                data-testid="toggle-auth-button"
+                onClick={() => setIsLogin(!isLogin)}
+                className="toggle-button"
+              >
+                {isLogin ? "Sign Up" : "Sign In"}
+              </button>
+            </p>
+          </div>
+        </div>
       </div>
 
       <style jsx>{`
@@ -180,20 +189,54 @@ export default function Auth({ setIsAuthenticated }) {
         .auth-card {
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+          border-radius: 12px;
+          padding: 2rem;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-card-header h2 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin: 0;
+          color: #0f172a;
+        }
+
+        .auth-card-header p {
+          color: #64748b;
+          margin-top: 0.3rem;
+          margin-bottom: 1.5rem;
         }
 
         .auth-form {
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 1.2rem;
         }
 
         .form-group {
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 0.4rem;
+        }
+
+        .form-group label {
+          font-weight: 600;
+          font-size: 0.95rem;
+          color: #0f172a;
+        }
+
+        .form-group input {
+          padding: 0.6rem 0.8rem;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          font-size: 1rem;
+          transition: all 0.2s;
+        }
+
+        .form-group input:focus {
+          border-color: #0284c7;
+          outline: none;
+          box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
         }
 
         .submit-button {
@@ -202,18 +245,24 @@ export default function Auth({ setIsAuthenticated }) {
           font-weight: 600;
           background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
           border: none;
+          color: white;
+          border-radius: 6px;
+          cursor: pointer;
           transition: transform 0.2s, box-shadow 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
         }
 
         .submit-button:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
+          box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
         }
 
         .button-icon {
           width: 18px;
           height: 18px;
-          margin-right: 8px;
         }
 
         .toggle-auth {
@@ -238,31 +287,16 @@ export default function Auth({ setIsAuthenticated }) {
           text-decoration: underline;
         }
 
-        /* ✅ Responsive styles */
         @media (max-width: 768px) {
-          .auth-container {
-            padding: 1rem;
-          }
-
           .auth-title {
             font-size: 2.2rem;
           }
-
-          .auth-subtitle {
-            font-size: 0.9rem;
-          }
-
           .auth-card {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
           }
-
           .submit-button {
-            font-size: 0.95rem;
             height: 42px;
-          }
-
-          .form-group label {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
           }
         }
 
@@ -270,18 +304,12 @@ export default function Auth({ setIsAuthenticated }) {
           .auth-title {
             font-size: 1.8rem;
           }
-
-          .auth-subtitle {
-            font-size: 0.85rem;
+          .auth-card {
+            padding: 1.2rem;
           }
-
-          .auth-form {
-            gap: 1rem;
-          }
-
           .submit-button {
-            font-size: 0.9rem;
             height: 40px;
+            font-size: 0.9rem;
           }
         }
       `}</style>

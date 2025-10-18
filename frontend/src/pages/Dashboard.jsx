@@ -251,15 +251,12 @@ export default function Dashboard({ setIsAuthenticated }) {
                       );
                     })()}
 
-                  {/* ✅ Status Dropdown */}
                   <div className="status-dropdown">
                     <label>Status: </label>
                     <select
                       className="status-select"
                       value={c.status}
-                      onChange={(e) =>
-                        handleStatusUpdate(c.id, e.target.value)
-                      }
+                      onChange={(e) => handleStatusUpdate(c.id, e.target.value)}
                     >
                       <option value="Pending">Pending</option>
                       <option value="Reviewed">Reviewed</option>
@@ -273,7 +270,7 @@ export default function Dashboard({ setIsAuthenticated }) {
         </div>
       </main>
 
-      {/* Modal */}
+      {/* ✅ Glassmorphic Modal */}
       {dialogOpen && (
         <div className="modal-overlay" onClick={() => setDialogOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -320,7 +317,7 @@ export default function Dashboard({ setIsAuthenticated }) {
         </div>
       )}
 
-      {/* Styles */}
+      {/* ✅ Styles */}
       <style jsx>{`
         .dashboard-container {
           min-height: 100vh;
@@ -357,11 +354,13 @@ export default function Dashboard({ setIsAuthenticated }) {
           gap: 6px;
           font-weight: 600;
         }
+
         .dashboard-main {
           padding: 2rem;
           max-width: 1400px;
           margin: auto;
         }
+
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -374,6 +373,7 @@ export default function Dashboard({ setIsAuthenticated }) {
           border-radius: 10px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
+
         .actions-bar {
           display: flex;
           flex-wrap: wrap;
@@ -382,16 +382,33 @@ export default function Dashboard({ setIsAuthenticated }) {
           margin-bottom: 2rem;
           align-items: center;
         }
+
         .search-box {
           flex: 1;
           position: relative;
+          display: flex;
+          align-items: center;
+          max-width: 380px;
+        }
+        .search-icon {
+          position: absolute;
+          left: 12px;
+          color: #64748b;
+          pointer-events: none;
         }
         .search-input {
-          width: 100%;
-          padding: 0.6rem 0.8rem 0.6rem 2rem;
+          flex: 1;
+          padding: 0.6rem 0.8rem 0.6rem 2.4rem;
           border: 1px solid #cbd5e1;
           border-radius: 6px;
+          transition: all 0.2s ease;
         }
+        .search-input:focus {
+          outline: none;
+          border-color: #0284c7;
+          box-shadow: 0 0 6px rgba(2, 132, 199, 0.25);
+        }
+
         .status-filter {
           padding: 0.6rem;
           border-radius: 6px;
@@ -406,6 +423,7 @@ export default function Dashboard({ setIsAuthenticated }) {
           font-weight: 600;
           cursor: pointer;
         }
+
         .candidates-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -416,40 +434,121 @@ export default function Dashboard({ setIsAuthenticated }) {
           padding: 1.2rem;
           border-radius: 10px;
           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
         }
-        .candidate-header {
+        .candidate-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+        .pending-card {
+          border-left: 4px solid #fbbf24;
+          background: #fffef9;
+        }
+
+        /* ✅ Glassmorphic Modal Styling */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
           display: flex;
-          justify-content: space-between;
-          align-items: start;
-        }
-        .resume-link {
-          color: #0284c7;
-          text-decoration: none;
-          font-weight: 600;
-        }
-        .resume-link:hover {
-          text-decoration: underline;
-        }
-        .status-dropdown {
-          margin-top: 1rem;
-          display: flex;
+          justify-content: center;
           align-items: center;
-          gap: 0.5rem;
+          z-index: 999;
+          animation: fadeIn 0.3s ease-in-out;
         }
-        .status-select {
+
+        .modal-content {
+          background: rgba(255, 255, 255, 0.25);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 0 25px rgba(0, 132, 255, 0.4);
+          padding: 2rem;
+          border-radius: 16px;
+          width: 90%;
+          max-width: 480px;
+          animation: popup 0.4s ease-out;
+        }
+
+        .modal-title {
+          font-size: 1.6rem;
+          font-weight: 700;
+          color: #0284c7;
+          margin-bottom: 0.5rem;
+        }
+
+        .modal-desc {
+          color: #475569;
+          margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          font-weight: 600;
+          display: block;
+          margin-bottom: 0.4rem;
+        }
+
+        .form-group input {
+          width: 100%;
+          padding: 0.5rem 0.75rem;
           border: 1px solid #cbd5e1;
           border-radius: 6px;
-          padding: 0.4rem 0.8rem;
-          background: #ffffff;
-          color: #0f172a;
-          font-weight: 500;
+        }
+
+        .modal-buttons {
+          display: flex;
+          justify-content: flex-end;
+          gap: 1rem;
+          margin-top: 1.5rem;
+        }
+
+        .submit-button {
+          background: linear-gradient(135deg, #0284c7, #0ea5e9);
+          color: white;
+          border: none;
+          padding: 0.6rem 1.2rem;
+          border-radius: 6px;
+          font-weight: 600;
           cursor: pointer;
-          transition: all 0.2s;
+          box-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
         }
-        .status-select:hover {
-          border-color: #0284c7;
-          background: #e0f2fe;
+
+        .cancel-button {
+          background: rgba(255, 255, 255, 0.3);
+          color: #1e293b;
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          padding: 0.6rem 1.2rem;
+          border-radius: 6px;
+          cursor: pointer;
         }
+
+        @keyframes popup {
+          from {
+            transform: scale(0.9);
+            opacity: 0;
+          }
+          to {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
         @media (max-width: 768px) {
           .dashboard-main {
             padding: 1rem;
